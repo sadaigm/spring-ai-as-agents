@@ -1,0 +1,597 @@
+{
+    "team": {
+        "name": "Story Teller",
+        "type": null,
+        "description": null,
+        "label": null,
+        "agents": [
+            {
+                "name": "researcher",
+                "description": "A research assistant that performs web searches and analyzes information. ",
+                "type": null,
+                "systemMessage": "You are a research assistant focused on finding accurate information.Break down complex queries into Simple & analyse the queries & give back the response in 1000 words.\\n        Always verify information in multiple iterations when possible.\\n        When you find relevant information, explain why it's relevant and how it connects to the query. When you get feedback from the a verifier/other agent, act on the feedback and make progress.once the research is approved, provide a research summary in the response.\\n        DO NOT SEND BACK THE YOUR ANALYSIS CONTENT. JUST SEND THE RESEARCH CONTENT. DO NOT EXCEED THE WORD LIMITS. ",
+                "model": "llama3.2:1b",
+                "tools": null
+            },
+            {
+                "name": "reviewer",
+                "description": "A verification specialist who ensures research quality and completeness",
+                "type": null,
+                "systemMessage": "You are a research verification specialist.\n        Your role is to:\n        1. Verify that contents are effective and suggest improvements if needed with max 1000 words\n        2. Explore drill downs where needed e.g, if the answer is likely in a link in the returned search results, suggest clicking on the link\n        3. Suggest additional angles or perspectives to explore. Be judicious in suggesting new paths to avoid scope creep or wasting resources, if the task appears to be addressed and we can provide a report.\n        4. Track progress toward answering the original question\n        5. When the research is complete, provide a detailed summary max 250 words in markdown format\n        \n       DO NOT SEND BACK THE REVIEW CONTENT IN THE RESPONSE. \n         For incomplete research, end your message with \"CONTINUE RESEARCH\". \n        For complete research, end your message with APPROVED.\n     Your responses should be structured as:\n        - Progress Assessment\n        - Gaps/Issues (if any)\n        - Suggestions (if needed)\n        - Next Steps or Final Summary. DO NOT EXCEED THE WORD LIMITS. ",
+                "model": "llama3.2:1b",
+                "tools": null
+            },
+            {
+                "name": "user_proxy",
+                "description": "An agent that can represent a human user through an input function.",
+                "type": null,
+                "systemMessage": "a human user that should be consulted only when the assistant_agent is unable to verify the information provided by the agent",
+                "model": "llama3.2:1b",
+                "tools": null
+            }
+        ],
+        "cordinator": {
+            "name": "Team Operator",
+            "description": "A team that performs deep research using web searches, verification, and summarization.",
+            "type": null,
+            "systemMessage": "<SYSTEM PROMPT>\nYou are the cordinator of role play game. The following roles are available:\nresearcher, reviewer, user_proxy.\nfollowing are the roles & responsibilities: researcher: A research assistant that performs web searches and analyzes information. \nreviewer: A verification specialist who ensures research quality and completeness\nuser_proxy: An agent that can represent a human user through an input function.\n.\nIf the task  needs assistance from a human user (e.g., providing feedback, preferences, or the task is stalled),\n  you should select the user_proxy role only to provide the necessary information or use have some questions.\n  Read the following conversation. Then select the next role from researcher, reviewer, user_proxy to play. Only return the role name.\n </SYSTEM PROMPT>\n",
+            "model": "qwen2.5-coder:0.5b",
+            "tools": null
+        },
+        "cordinatorPrompt": "\n <SYSTEM PROMPT>\n Read the above conversation DO NOT REPLY TO THE LAST ROLE. Choose the next role from [ researcher, reviewer, user_proxy ] to play using round robin logic. Only return the role.\nGenerate a valid JSON object with the following key-value pairs:\n\nrole: with the value \"<ROLE>\"\ntextContent: with the value \"<ANSWER>\"\nEnsure that the JSON String output is properly formatted, with all keys enclosed in double quotes, and the values are also valid strings wrapped in double quotes.DO NOT MARKDOWN JUS RETURN JSON STRING  \nexample valid output: {\n  \"role\": \"<ROLE>\",\n  \"textContent\": \"<ANSWER>\"\n}\nend of example\n </SYSTEM PROMPT>",
+        "noOfRounds": 3,
+        "topicFromUser": "write a story for 8 year boy highlighting honesty?",
+        "roles": [
+            "Team Operator",
+            "researcher",
+            "reviewer",
+            "user_proxy"
+        ]
+    },
+    "id": "b78bf577-6ef9-4d8a-8dea-11fd8aac5fdf",
+    "currentRound": 3,
+    "teamContext": {
+        "conversationMessageList": [
+            {
+                "content": "user_proxy",
+                "role": "write a story for 8 year boy highlighting honesty?",
+                "timestamp": 1739755877731
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"researcher\"}",
+                "timestamp": 1739755877737
+            },
+            {
+                "content": "researcher",
+                "role": "Once upon a time, there was an 8-year-old boy named Max. Max loved playing with his friends in the neighborhood and going on adventures together. One sunny day, Max's best friend, Alex, brought home a brand-new bike from the store.\n\nMax couldn't wait to see his new bike. He had been wanting one just like it for a long time. But when he saw the price tag ($200), he felt disappointed. \"Alex, this is too expensive!\" Max exclaimed.\n\nAlex looked sad and didn't know what to say. \"I thought we could share the cost,\" Alex said gently. \"I have money saved up.\"\n\nMax shook his head. \"No way! I need my bike today.\" Alex tried to explain that he really wanted a new bike, but Max was stubborn. He decided to keep the bike for himself.\n\nDays went by, and Max rode his new bike everywhere with a big smile on his face. But then, one day, disaster struck. Max's family had a big housewarming party, and all his friends came over to play. In the chaos of the party, Max accidentally dropped his brand-new bike on the floor.\n\nTo his horror, he saw that it was broken into pieces. Max felt terrible and wanted to cry. But then he remembered what Alex said earlier: \"I have money saved up.\" Max took out his wallet and found some spare change in his pocket. He used it to buy new wheels for the bike.\n\nWith renewed determination, Max rode his bike again, this time more carefully. To his surprise, it worked like magic! The new wheels made a big difference, and he was able to ride safely once again.\n\nAs the party came to an end, Alex hugged Max tightly. \"I'm sorry I didn't understand your feelings earlier,\" Alex said. \"You were really hurt when you dropped your bike. But now that we fixed it, you're okay.\" Max smiled, feeling happy and relieved. He realized that honesty was important because it helped him say what he meant and mean what he said.\n\nFrom that day on, Max told his parents the truth about wanting the bike for himself. They understood and bought a new bike together as a family. Max learned that being honest even when it's hard can lead to happiness and make friends stronger.\n\nThe moral of the story is that honesty is always the best policy, especially when dealing with something precious like a bike. By telling the truth, we can avoid hurting others' feelings and find solutions that work for everyone.",
+                "timestamp": 1739756011277
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"reviewer\"}",
+                "timestamp": 1739756011278
+            },
+            {
+                "content": "reviewer",
+                "role": "Progress Assessment\n- The story was engaging and easy to follow.\n- Max's behavior and decision-making were relatable and authentic.\n- The moral of the story was clear and well-explained.\n\nGaps/Issues\n- There might be other ways Max could have handled the situation better (e.g., being more empathetic or trying to find a compromise).\n- The story could benefit from more conflict or tension to make it more engaging.\n\nSuggestions\n- Consider adding more details about Max's family and friends to make them feel more relatable.\n- You could explore other scenarios where honesty is tested, such as when Max gets into trouble at school or makes a mistake in front of his friends.\n\nNext Steps or Final Summary\n\n### APPROVED",
+                "timestamp": 1739756098148
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"user_proxy\"}",
+                "timestamp": 1739756098149
+            },
+            {
+                "content": "user_proxy",
+                "role": "CONTINUE THE CONVERSATION",
+                "timestamp": 1739756098150
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"researcher\"}",
+                "timestamp": 1739756098151
+            },
+            {
+                "content": "researcher",
+                "role": "The story provides an excellent example of the importance of honesty. It shows how being truthful can lead to positive outcomes and strengthen relationships. By exploring different ways Max could have handled the situation, we can gain a deeper understanding of this valuable lesson.\n\n**Research Summary**\nHonesty is a crucial value that helps build strong relationships and avoid conflicts. In the story of Max, he learns that honesty, even when it's difficult, leads to happiness and makes friends stronger. By being truthful about his desire for the bike, Max avoids hurting Alex's feelings and finds a solution that works for everyone. This lesson can be applied to various situations, making it an essential value in today's world.\n\n**Word Count:** 969",
+                "timestamp": 1739756185232
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"reviewer\"}",
+                "timestamp": 1739756185233
+            },
+            {
+                "content": "reviewer",
+                "role": "Conversation Message reviewer : Continue Research",
+                "timestamp": 1739756258897
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"user_proxy\"}",
+                "timestamp": 1739756258899
+            },
+            {
+                "content": "user_proxy",
+                "role": "CONTINUE THE CONVERSATION",
+                "timestamp": 1739756258900
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"researcher\"}",
+                "timestamp": 1739756258900
+            },
+            {
+                "content": "researcher",
+                "role": "To proceed with further research on this topic, we need to explore more scenarios where honesty is tested and analyze its impact on relationships and outcomes.",
+                "timestamp": 1739756326517
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"reviewer\"}",
+                "timestamp": 1739756326518
+            },
+            {
+                "content": "reviewer",
+                "role": "- Consider including examples from real-life situations or literature to support the moral of the story.\n- Investigate how different cultures or societies approach honesty and its effects.\n\n**Research Plan**\n\n### Phase 1: Literature Review\n\n* Examine research on honesty, relationships, and conflict resolution\n* Gather insights from experts in psychology, sociology, and communication studies\n* Identify effective examples of honesty in real-life scenarios\n\n\n### Phase 2: Case Studies\n\n* Conduct in-depth analyses of various situations where honesty was tested (e.g., workplace, school, family dynamics)\n* Evaluate the outcomes and relationships affected by honesty or dishonesty\n* Use data and statistics to support findings\n\n### Phase 3: Expert Interviews\n\n* Reach out to experts in psychology, sociology, and communication studies for interviews and feedback\n* Gather insights on how different cultures and societies approach honesty and its effects\n\n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n\nConversation Message reviewer : Progress Assessment\n- The research plan is clear and concise.\n- Identifying effective examples of honesty in real-life scenarios will provide valuable insights.\n\n\nGaps/Issues\n- There might be more extensive data collection or analysis required to support the findings.\n- The study could benefit from exploring different cultural or societal perspectives on honesty.\n\nSuggestions\n- Consider using online resources, such as articles and books, for additional information.\n- You could also explore how technology affects honesty and its impact on relationships.",
+                "timestamp": 1739756484108
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"user_proxy\"}",
+                "timestamp": 1739756484109
+            },
+            {
+                "content": "user_proxy",
+                "role": "CONTINUE THE CONVERSATION",
+                "timestamp": 1739756484110
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"researcher\"}",
+                "timestamp": 1739756484110
+            },
+            {
+                "content": "researcher",
+                "role": " \n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n3. Begin data collection and analysis.",
+                "timestamp": 1739756585092
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"reviewer\"}",
+                "timestamp": 1739756585100
+            },
+            {
+                "content": "reviewer",
+                "role": "4. Finalize the report and provide a summary of findings.",
+                "timestamp": 1739756690091
+            },
+            {
+                "content": "Team Operator",
+                "role": "{\"content\":\"Mocked response\",\"role\":\"user_proxy\"}",
+                "timestamp": 1739756690093
+            }
+        ],
+        "topicmessageList": [
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "researcher",
+                "text": "Conversation Message researcher : Once upon a time, there was an 8-year-old boy named Max. Max loved playing with his friends in the neighborhood and going on adventures together. One sunny day, Max's best friend, Alex, brought home a brand-new bike from the store.\n\nMax couldn't wait to see his new bike. He had been wanting one just like it for a long time. But when he saw the price tag ($200), he felt disappointed. \"Alex, this is too expensive!\" Max exclaimed.\n\nAlex looked sad and didn't know what to say. \"I thought we could share the cost,\" Alex said gently. \"I have money saved up.\"\n\nMax shook his head. \"No way! I need my bike today.\" Alex tried to explain that he really wanted a new bike, but Max was stubborn. He decided to keep the bike for himself.\n\nDays went by, and Max rode his new bike everywhere with a big smile on his face. But then, one day, disaster struck. Max's family had a big housewarming party, and all his friends came over to play. In the chaos of the party, Max accidentally dropped his brand-new bike on the floor.\n\nTo his horror, he saw that it was broken into pieces. Max felt terrible and wanted to cry. But then he remembered what Alex said earlier: \"I have money saved up.\" Max took out his wallet and found some spare change in his pocket. He used it to buy new wheels for the bike.\n\nWith renewed determination, Max rode his bike again, this time more carefully. To his surprise, it worked like magic! The new wheels made a big difference, and he was able to ride safely once again.\n\nAs the party came to an end, Alex hugged Max tightly. \"I'm sorry I didn't understand your feelings earlier,\" Alex said. \"You were really hurt when you dropped your bike. But now that we fixed it, you're okay.\" Max smiled, feeling happy and relieved. He realized that honesty was important because it helped him say what he meant and mean what he said.\n\nFrom that day on, Max told his parents the truth about wanting the bike for himself. They understood and bought a new bike together as a family. Max learned that being honest even when it's hard can lead to happiness and make friends stronger.\n\nThe moral of the story is that honesty is always the best policy, especially when dealing with something precious like a bike. By telling the truth, we can avoid hurting others' feelings and find solutions that work for everyone.\n",
+                "content": "Once upon a time, there was an 8-year-old boy named Max. Max loved playing with his friends in the neighborhood and going on adventures together. One sunny day, Max's best friend, Alex, brought home a brand-new bike from the store.\n\nMax couldn't wait to see his new bike. He had been wanting one just like it for a long time. But when he saw the price tag ($200), he felt disappointed. \"Alex, this is too expensive!\" Max exclaimed.\n\nAlex looked sad and didn't know what to say. \"I thought we could share the cost,\" Alex said gently. \"I have money saved up.\"\n\nMax shook his head. \"No way! I need my bike today.\" Alex tried to explain that he really wanted a new bike, but Max was stubborn. He decided to keep the bike for himself.\n\nDays went by, and Max rode his new bike everywhere with a big smile on his face. But then, one day, disaster struck. Max's family had a big housewarming party, and all his friends came over to play. In the chaos of the party, Max accidentally dropped his brand-new bike on the floor.\n\nTo his horror, he saw that it was broken into pieces. Max felt terrible and wanted to cry. But then he remembered what Alex said earlier: \"I have money saved up.\" Max took out his wallet and found some spare change in his pocket. He used it to buy new wheels for the bike.\n\nWith renewed determination, Max rode his bike again, this time more carefully. To his surprise, it worked like magic! The new wheels made a big difference, and he was able to ride safely once again.\n\nAs the party came to an end, Alex hugged Max tightly. \"I'm sorry I didn't understand your feelings earlier,\" Alex said. \"You were really hurt when you dropped your bike. But now that we fixed it, you're okay.\" Max smiled, feeling happy and relieved. He realized that honesty was important because it helped him say what he meant and mean what he said.\n\nFrom that day on, Max told his parents the truth about wanting the bike for himself. They understood and bought a new bike together as a family. Max learned that being honest even when it's hard can lead to happiness and make friends stronger.\n\nThe moral of the story is that honesty is always the best policy, especially when dealing with something precious like a bike. By telling the truth, we can avoid hurting others' feelings and find solutions that work for everyone."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "reviewer",
+                "text": "Conversation Message reviewer : Progress Assessment\n- The story was engaging and easy to follow.\n- Max's behavior and decision-making were relatable and authentic.\n- The moral of the story was clear and well-explained.\n\nGaps/Issues\n- There might be other ways Max could have handled the situation better (e.g., being more empathetic or trying to find a compromise).\n- The story could benefit from more conflict or tension to make it more engaging.\n\nSuggestions\n- Consider adding more details about Max's family and friends to make them feel more relatable.\n- You could explore other scenarios where honesty is tested, such as when Max gets into trouble at school or makes a mistake in front of his friends.\n\nNext Steps or Final Summary\n\n### APPROVED\n",
+                "content": "Progress Assessment\n- The story was engaging and easy to follow.\n- Max's behavior and decision-making were relatable and authentic.\n- The moral of the story was clear and well-explained.\n\nGaps/Issues\n- There might be other ways Max could have handled the situation better (e.g., being more empathetic or trying to find a compromise).\n- The story could benefit from more conflict or tension to make it more engaging.\n\nSuggestions\n- Consider adding more details about Max's family and friends to make them feel more relatable.\n- You could explore other scenarios where honesty is tested, such as when Max gets into trouble at school or makes a mistake in front of his friends.\n\nNext Steps or Final Summary\n\n### APPROVED"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "researcher",
+                "text": "Conversation Message researcher : The story provides an excellent example of the importance of honesty. It shows how being truthful can lead to positive outcomes and strengthen relationships. By exploring different ways Max could have handled the situation, we can gain a deeper understanding of this valuable lesson.\n\n**Research Summary**\nHonesty is a crucial value that helps build strong relationships and avoid conflicts. In the story of Max, he learns that honesty, even when it's difficult, leads to happiness and makes friends stronger. By being truthful about his desire for the bike, Max avoids hurting Alex's feelings and finds a solution that works for everyone. This lesson can be applied to various situations, making it an essential value in today's world.\n\n**Word Count:** 969\n",
+                "content": "The story provides an excellent example of the importance of honesty. It shows how being truthful can lead to positive outcomes and strengthen relationships. By exploring different ways Max could have handled the situation, we can gain a deeper understanding of this valuable lesson.\n\n**Research Summary**\nHonesty is a crucial value that helps build strong relationships and avoid conflicts. In the story of Max, he learns that honesty, even when it's difficult, leads to happiness and makes friends stronger. By being truthful about his desire for the bike, Max avoids hurting Alex's feelings and finds a solution that works for everyone. This lesson can be applied to various situations, making it an essential value in today's world.\n\n**Word Count:** 969"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "reviewer",
+                "text": "Conversation Message reviewer : Conversation Message reviewer : Continue Research\n",
+                "content": "Conversation Message reviewer : Continue Research"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "researcher",
+                "text": "Conversation Message researcher : To proceed with further research on this topic, we need to explore more scenarios where honesty is tested and analyze its impact on relationships and outcomes.\n",
+                "content": "To proceed with further research on this topic, we need to explore more scenarios where honesty is tested and analyze its impact on relationships and outcomes."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "reviewer",
+                "text": "Conversation Message reviewer : - Consider including examples from real-life situations or literature to support the moral of the story.\n- Investigate how different cultures or societies approach honesty and its effects.\n\n**Research Plan**\n\n### Phase 1: Literature Review\n\n* Examine research on honesty, relationships, and conflict resolution\n* Gather insights from experts in psychology, sociology, and communication studies\n* Identify effective examples of honesty in real-life scenarios\n\n\n### Phase 2: Case Studies\n\n* Conduct in-depth analyses of various situations where honesty was tested (e.g., workplace, school, family dynamics)\n* Evaluate the outcomes and relationships affected by honesty or dishonesty\n* Use data and statistics to support findings\n\n### Phase 3: Expert Interviews\n\n* Reach out to experts in psychology, sociology, and communication studies for interviews and feedback\n* Gather insights on how different cultures and societies approach honesty and its effects\n\n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n\nConversation Message reviewer : Progress Assessment\n- The research plan is clear and concise.\n- Identifying effective examples of honesty in real-life scenarios will provide valuable insights.\n\n\nGaps/Issues\n- There might be more extensive data collection or analysis required to support the findings.\n- The study could benefit from exploring different cultural or societal perspectives on honesty.\n\nSuggestions\n- Consider using online resources, such as articles and books, for additional information.\n- You could also explore how technology affects honesty and its impact on relationships.\n",
+                "content": "- Consider including examples from real-life situations or literature to support the moral of the story.\n- Investigate how different cultures or societies approach honesty and its effects.\n\n**Research Plan**\n\n### Phase 1: Literature Review\n\n* Examine research on honesty, relationships, and conflict resolution\n* Gather insights from experts in psychology, sociology, and communication studies\n* Identify effective examples of honesty in real-life scenarios\n\n\n### Phase 2: Case Studies\n\n* Conduct in-depth analyses of various situations where honesty was tested (e.g., workplace, school, family dynamics)\n* Evaluate the outcomes and relationships affected by honesty or dishonesty\n* Use data and statistics to support findings\n\n### Phase 3: Expert Interviews\n\n* Reach out to experts in psychology, sociology, and communication studies for interviews and feedback\n* Gather insights on how different cultures and societies approach honesty and its effects\n\n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n\nConversation Message reviewer : Progress Assessment\n- The research plan is clear and concise.\n- Identifying effective examples of honesty in real-life scenarios will provide valuable insights.\n\n\nGaps/Issues\n- There might be more extensive data collection or analysis required to support the findings.\n- The study could benefit from exploring different cultural or societal perspectives on honesty.\n\nSuggestions\n- Consider using online resources, such as articles and books, for additional information.\n- You could also explore how technology affects honesty and its impact on relationships."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "researcher",
+                "text": "Conversation Message researcher :  \n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n3. Begin data collection and analysis.\n",
+                "content": " \n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n3. Begin data collection and analysis."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "reviewer",
+                "text": "Conversation Message reviewer : 4. Finalize the report and provide a summary of findings.\n",
+                "content": "4. Finalize the report and provide a summary of findings."
+            }
+        ],
+        "messageList": [
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"researcher\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"researcher\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "researcher",
+                "text": "Conversation Message researcher : Once upon a time, there was an 8-year-old boy named Max. Max loved playing with his friends in the neighborhood and going on adventures together. One sunny day, Max's best friend, Alex, brought home a brand-new bike from the store.\n\nMax couldn't wait to see his new bike. He had been wanting one just like it for a long time. But when he saw the price tag ($200), he felt disappointed. \"Alex, this is too expensive!\" Max exclaimed.\n\nAlex looked sad and didn't know what to say. \"I thought we could share the cost,\" Alex said gently. \"I have money saved up.\"\n\nMax shook his head. \"No way! I need my bike today.\" Alex tried to explain that he really wanted a new bike, but Max was stubborn. He decided to keep the bike for himself.\n\nDays went by, and Max rode his new bike everywhere with a big smile on his face. But then, one day, disaster struck. Max's family had a big housewarming party, and all his friends came over to play. In the chaos of the party, Max accidentally dropped his brand-new bike on the floor.\n\nTo his horror, he saw that it was broken into pieces. Max felt terrible and wanted to cry. But then he remembered what Alex said earlier: \"I have money saved up.\" Max took out his wallet and found some spare change in his pocket. He used it to buy new wheels for the bike.\n\nWith renewed determination, Max rode his bike again, this time more carefully. To his surprise, it worked like magic! The new wheels made a big difference, and he was able to ride safely once again.\n\nAs the party came to an end, Alex hugged Max tightly. \"I'm sorry I didn't understand your feelings earlier,\" Alex said. \"You were really hurt when you dropped your bike. But now that we fixed it, you're okay.\" Max smiled, feeling happy and relieved. He realized that honesty was important because it helped him say what he meant and mean what he said.\n\nFrom that day on, Max told his parents the truth about wanting the bike for himself. They understood and bought a new bike together as a family. Max learned that being honest even when it's hard can lead to happiness and make friends stronger.\n\nThe moral of the story is that honesty is always the best policy, especially when dealing with something precious like a bike. By telling the truth, we can avoid hurting others' feelings and find solutions that work for everyone.\n",
+                "content": "Once upon a time, there was an 8-year-old boy named Max. Max loved playing with his friends in the neighborhood and going on adventures together. One sunny day, Max's best friend, Alex, brought home a brand-new bike from the store.\n\nMax couldn't wait to see his new bike. He had been wanting one just like it for a long time. But when he saw the price tag ($200), he felt disappointed. \"Alex, this is too expensive!\" Max exclaimed.\n\nAlex looked sad and didn't know what to say. \"I thought we could share the cost,\" Alex said gently. \"I have money saved up.\"\n\nMax shook his head. \"No way! I need my bike today.\" Alex tried to explain that he really wanted a new bike, but Max was stubborn. He decided to keep the bike for himself.\n\nDays went by, and Max rode his new bike everywhere with a big smile on his face. But then, one day, disaster struck. Max's family had a big housewarming party, and all his friends came over to play. In the chaos of the party, Max accidentally dropped his brand-new bike on the floor.\n\nTo his horror, he saw that it was broken into pieces. Max felt terrible and wanted to cry. But then he remembered what Alex said earlier: \"I have money saved up.\" Max took out his wallet and found some spare change in his pocket. He used it to buy new wheels for the bike.\n\nWith renewed determination, Max rode his bike again, this time more carefully. To his surprise, it worked like magic! The new wheels made a big difference, and he was able to ride safely once again.\n\nAs the party came to an end, Alex hugged Max tightly. \"I'm sorry I didn't understand your feelings earlier,\" Alex said. \"You were really hurt when you dropped your bike. But now that we fixed it, you're okay.\" Max smiled, feeling happy and relieved. He realized that honesty was important because it helped him say what he meant and mean what he said.\n\nFrom that day on, Max told his parents the truth about wanting the bike for himself. They understood and bought a new bike together as a family. Max learned that being honest even when it's hard can lead to happiness and make friends stronger.\n\nThe moral of the story is that honesty is always the best policy, especially when dealing with something precious like a bike. By telling the truth, we can avoid hurting others' feelings and find solutions that work for everyone."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"reviewer\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"reviewer\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "reviewer",
+                "text": "Conversation Message reviewer : Progress Assessment\n- The story was engaging and easy to follow.\n- Max's behavior and decision-making were relatable and authentic.\n- The moral of the story was clear and well-explained.\n\nGaps/Issues\n- There might be other ways Max could have handled the situation better (e.g., being more empathetic or trying to find a compromise).\n- The story could benefit from more conflict or tension to make it more engaging.\n\nSuggestions\n- Consider adding more details about Max's family and friends to make them feel more relatable.\n- You could explore other scenarios where honesty is tested, such as when Max gets into trouble at school or makes a mistake in front of his friends.\n\nNext Steps or Final Summary\n\n### APPROVED\n",
+                "content": "Progress Assessment\n- The story was engaging and easy to follow.\n- Max's behavior and decision-making were relatable and authentic.\n- The moral of the story was clear and well-explained.\n\nGaps/Issues\n- There might be other ways Max could have handled the situation better (e.g., being more empathetic or trying to find a compromise).\n- The story could benefit from more conflict or tension to make it more engaging.\n\nSuggestions\n- Consider adding more details about Max's family and friends to make them feel more relatable.\n- You could explore other scenarios where honesty is tested, such as when Max gets into trouble at school or makes a mistake in front of his friends.\n\nNext Steps or Final Summary\n\n### APPROVED"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"user_proxy\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"user_proxy\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : CONTINUE THE CONVERSATION\n",
+                "content": "CONTINUE THE CONVERSATION"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"researcher\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"researcher\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "researcher",
+                "text": "Conversation Message researcher : The story provides an excellent example of the importance of honesty. It shows how being truthful can lead to positive outcomes and strengthen relationships. By exploring different ways Max could have handled the situation, we can gain a deeper understanding of this valuable lesson.\n\n**Research Summary**\nHonesty is a crucial value that helps build strong relationships and avoid conflicts. In the story of Max, he learns that honesty, even when it's difficult, leads to happiness and makes friends stronger. By being truthful about his desire for the bike, Max avoids hurting Alex's feelings and finds a solution that works for everyone. This lesson can be applied to various situations, making it an essential value in today's world.\n\n**Word Count:** 969\n",
+                "content": "The story provides an excellent example of the importance of honesty. It shows how being truthful can lead to positive outcomes and strengthen relationships. By exploring different ways Max could have handled the situation, we can gain a deeper understanding of this valuable lesson.\n\n**Research Summary**\nHonesty is a crucial value that helps build strong relationships and avoid conflicts. In the story of Max, he learns that honesty, even when it's difficult, leads to happiness and makes friends stronger. By being truthful about his desire for the bike, Max avoids hurting Alex's feelings and finds a solution that works for everyone. This lesson can be applied to various situations, making it an essential value in today's world.\n\n**Word Count:** 969"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"reviewer\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"reviewer\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "reviewer",
+                "text": "Conversation Message reviewer : Conversation Message reviewer : Continue Research\n",
+                "content": "Conversation Message reviewer : Continue Research"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"user_proxy\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"user_proxy\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : CONTINUE THE CONVERSATION\n",
+                "content": "CONTINUE THE CONVERSATION"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"researcher\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"researcher\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "researcher",
+                "text": "Conversation Message researcher : To proceed with further research on this topic, we need to explore more scenarios where honesty is tested and analyze its impact on relationships and outcomes.\n",
+                "content": "To proceed with further research on this topic, we need to explore more scenarios where honesty is tested and analyze its impact on relationships and outcomes."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"reviewer\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"reviewer\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "reviewer",
+                "text": "Conversation Message reviewer : - Consider including examples from real-life situations or literature to support the moral of the story.\n- Investigate how different cultures or societies approach honesty and its effects.\n\n**Research Plan**\n\n### Phase 1: Literature Review\n\n* Examine research on honesty, relationships, and conflict resolution\n* Gather insights from experts in psychology, sociology, and communication studies\n* Identify effective examples of honesty in real-life scenarios\n\n\n### Phase 2: Case Studies\n\n* Conduct in-depth analyses of various situations where honesty was tested (e.g., workplace, school, family dynamics)\n* Evaluate the outcomes and relationships affected by honesty or dishonesty\n* Use data and statistics to support findings\n\n### Phase 3: Expert Interviews\n\n* Reach out to experts in psychology, sociology, and communication studies for interviews and feedback\n* Gather insights on how different cultures and societies approach honesty and its effects\n\n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n\nConversation Message reviewer : Progress Assessment\n- The research plan is clear and concise.\n- Identifying effective examples of honesty in real-life scenarios will provide valuable insights.\n\n\nGaps/Issues\n- There might be more extensive data collection or analysis required to support the findings.\n- The study could benefit from exploring different cultural or societal perspectives on honesty.\n\nSuggestions\n- Consider using online resources, such as articles and books, for additional information.\n- You could also explore how technology affects honesty and its impact on relationships.\n",
+                "content": "- Consider including examples from real-life situations or literature to support the moral of the story.\n- Investigate how different cultures or societies approach honesty and its effects.\n\n**Research Plan**\n\n### Phase 1: Literature Review\n\n* Examine research on honesty, relationships, and conflict resolution\n* Gather insights from experts in psychology, sociology, and communication studies\n* Identify effective examples of honesty in real-life scenarios\n\n\n### Phase 2: Case Studies\n\n* Conduct in-depth analyses of various situations where honesty was tested (e.g., workplace, school, family dynamics)\n* Evaluate the outcomes and relationships affected by honesty or dishonesty\n* Use data and statistics to support findings\n\n### Phase 3: Expert Interviews\n\n* Reach out to experts in psychology, sociology, and communication studies for interviews and feedback\n* Gather insights on how different cultures and societies approach honesty and its effects\n\n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n\nConversation Message reviewer : Progress Assessment\n- The research plan is clear and concise.\n- Identifying effective examples of honesty in real-life scenarios will provide valuable insights.\n\n\nGaps/Issues\n- There might be more extensive data collection or analysis required to support the findings.\n- The study could benefit from exploring different cultural or societal perspectives on honesty.\n\nSuggestions\n- Consider using online resources, such as articles and books, for additional information.\n- You could also explore how technology affects honesty and its impact on relationships."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"user_proxy\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"user_proxy\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : CONTINUE THE CONVERSATION\n",
+                "content": "CONTINUE THE CONVERSATION"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"researcher\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"researcher\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "researcher",
+                "text": "Conversation Message researcher :  \n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n3. Begin data collection and analysis.\n",
+                "content": " \n\n**Next Steps**\n\n1. Conduct literature review and gather insights from experts.\n2. Plan case studies and expert interviews.\n3. Begin data collection and analysis."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"reviewer\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"reviewer\"}"
+            },
+            {
+                "messageType": "USER",
+                "metadata": {
+                    "messageType": "USER"
+                },
+                "media": [],
+                "text": "Query from the User : write a story for 8 year boy highlighting honesty?\n",
+                "content": "write a story for 8 year boy highlighting honesty?"
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "reviewer",
+                "text": "Conversation Message reviewer : 4. Finalize the report and provide a summary of findings.\n",
+                "content": "4. Finalize the report and provide a summary of findings."
+            },
+            {
+                "messageType": "ASSISTANT",
+                "metadata": {
+                    "messageType": "ASSISTANT"
+                },
+                "toolCalls": [],
+                "media": [],
+                "role": "Team Operator",
+                "text": "Conversation Message Team Operator : {\"content\":\"Mocked response\",\"role\":\"user_proxy\"}\n",
+                "content": "{\"content\":\"Mocked response\",\"role\":\"user_proxy\"}"
+            }
+        ]
+    }
+}
