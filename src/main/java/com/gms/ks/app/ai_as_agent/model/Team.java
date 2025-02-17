@@ -9,17 +9,27 @@ public class Team {
     String description;
     String label;
     List<AiAgent> agents = new ArrayList<>();
-
+//Coordinator
     AiAgent cordinator;
     String cordinatorPrompt;
 
     Integer noOfRounds = 3;
+
+    String topicFromUser;
+
+    List<String> roles = new ArrayList<>();
+
+    public Team() {
+//
+    }
 
     public Team(String name, List<AiAgent> agents, AiAgent cordinator, String cordinatorPrompt) {
         this.name = name;
         this.agents = agents;
         this.cordinator = cordinator;
         this.cordinatorPrompt = cordinatorPrompt;
+        roles.add(cordinator.name);
+        agents.forEach((a) -> roles.add(a.name));
     }
 
     public String getName() {
@@ -84,5 +94,21 @@ public class Team {
 
     public void setNoOfRounds(Integer noOfRounds) {
         this.noOfRounds = noOfRounds;
+    }
+
+    public String getTopicFromUser() {
+        return topicFromUser;
+    }
+
+    public void setTopicFromUser(String topicFromUser) {
+        this.topicFromUser = topicFromUser;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }
