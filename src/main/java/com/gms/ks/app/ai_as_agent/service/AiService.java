@@ -1,6 +1,8 @@
 package com.gms.ks.app.ai_as_agent.service;
 
 import com.gms.ks.app.ai_as_agent.model.AiAgent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -15,6 +17,9 @@ import java.util.List;
 
 @Service
 public class AiService {
+
+    Logger logger
+            = LoggerFactory.getLogger(AiService.class);
 
     private final ChatClient chatClient;
 
@@ -36,9 +41,11 @@ public class AiService {
     private String invokeAgent(AiAgent agent, List<Message> messages) {
         OllamaOptions options = OllamaOptions.builder()
                 .model(agent.getModel())
-
                 .build();
-        ChatResponse chatResponse = chatClient.prompt(new Prompt(messages, options)).call().chatResponse();
+
+        Prompt prompt = new Prompt(messages, options);
+        logger.info("Prompt: {}", prompt.getContents());
+        ChatResponse chatResponse = chatClient.prompt(prompt).call().chatResponse();
         return chatResponse.getResult().getOutput().getContent();
     }
 
